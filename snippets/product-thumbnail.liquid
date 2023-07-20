@@ -101,13 +101,40 @@
         <circle class="path" fill="none" stroke-width="4" cx="33" cy="33" r="30"></circle>
       </svg>
     </div>
-    <div class="product__media media media--transparent">
+    <div class="product__media media media--transparent" style="position: relative;">
       {{ media.preview_image | image_url: width: 1946 | image_tag:
         class: image_class,
         loading: lazy,
         sizes: sizes,
         widths: '246, 493, 600, 713, 823, 990, 1100, 1206, 1346, 1426, 1646, 1946'
       }}
+
+    {% if customer_metafield %}
+      {% liquid
+        assign x_pos = 0
+        assign y_pos = 0
+        for tag in tags
+          assign tag_parts = tag | split: ':'
+          if tag_parts[0] == 'logo_x'
+            assign x_pos = tag_parts[1] | strip
+          elsif tag_parts[0] == 'logo_y'
+            assign y_pos = tag_parts[1] | strip
+          endif
+        endfor
+      %}
+
+      {%- if is_first -%}
+        <div style="position:absolute;top:{{ x_pos }}%;left:{{ y_pos }}%;width: 50px;">
+          <img src="{{ customer_metafield }}" 
+            alt="Logo of a school on a product"
+            width="200"
+            height="auto"
+            style="width: 100%;"
+            >
+        </div>
+      {%- endif -%}
+    {% endif %}
+
     </div>
     <button class="product__media-toggle quick-add-hidden product__media-zoom-{{ section.settings.image_zoom }}" type="button" aria-haspopup="dialog" data-media-id="{{ media.id }}">
       <span class="visually-hidden">
