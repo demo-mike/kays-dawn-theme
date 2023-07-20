@@ -102,6 +102,11 @@
                 assign lazy_load = true
               endif
             -%}
+
+            {% assign customer_metafield = null %}
+            {% if customer %}
+              {% assign customer_metafield = customer.metafields.custom.school_logo %}
+            {% endif %}
             {% render 'product-thumbnail',
               media: media,
               media_count: media_count,
@@ -114,7 +119,10 @@
               media_width: media_width,
               media_fit: section.settings.media_fit,
               constrain_to_viewport: section.settings.constrain_to_viewport,
-              lazy_load: lazy_load
+              lazy_load: lazy_load,
+              is_first: forloop.first,
+              tags: product.tags,
+              customer_metafield: customer_metafield
             %}
           </li>
         {%- endunless -%}
